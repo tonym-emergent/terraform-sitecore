@@ -1,7 +1,7 @@
 # Sitecore Solr Module
 Terraform Module for setting up Solr on Azure VM for Sitecore. 
 
-This Terraform module takes care of complete automation for Solr Setup for Solr by:
+This Terraform module takes care of complete automation for Solr Setup for Sitecore by:
   - Creating a Public IP assigned Azure Windows VM
   - Installing Solr
   - Create Sitecore Cores
