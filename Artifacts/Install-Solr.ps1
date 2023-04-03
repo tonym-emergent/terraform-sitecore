@@ -10,7 +10,7 @@ Add-WindowsFeature Web-Server
 # Open Firewall for Port 8983
 New-NetFirewallRule -DisplayName "Whitelist Solr Port" -Direction inboud -Profile Any -LocalPort 8983 -Protocol TCP
 
-$ArtifactsUrl = "https://github.com/codeblitzmaster/terraform-azurerm-sitecoresolr/blob/main/Artifacts/$($SitecoreVersion).zip"
+$ArtifactsUrl = "https://raw.githubusercontent.com/codeblitzmaster/terraform-azurerm-sitecoresolr/main/Artifacts/$($SitecoreVersion).zip"
 
 $CWD= Get-Location
 $File = $(Split-Path -Path $ArtifactsUrl -Leaf)
