@@ -16,8 +16,8 @@ provider "azurerm" {
 
 module "sitecoresolr" {
   source  = "codeblitzmaster/sitecoresolr/azurerm"
-  version = "1.0.1-beta"
-  # insert the 5 required variables here
+  version = "1.0.0"
+ 
     client = "ACM"
     admin_username = "adminuser"
     environment = "STG"
