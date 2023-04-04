@@ -36,15 +36,15 @@ This Terraform module takes care of complete automation for Solr Setup for Sitec
 |------|------|
 | [azurecaf_name.this](https://registry.terraform.io/providers/aztfmod/azurecaf/2.0.0-preview3/docs/resources/name) | resource |
 | [azurerm_network_interface.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/network_interface) | resource |
-| [azurerm_network_interface_security_group_association.example](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/network_interface_security_group_association) | resource |
+| [azurerm_network_interface_security_group_association.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/network_interface_security_group_association) | resource |
 | [azurerm_network_security_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/network_security_group) | resource |
 | [azurerm_public_ip.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/public_ip) | resource |
-| [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/resource_group) | resource |
 | [azurerm_subnet.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/subnet) | resource |
 | [azurerm_virtual_machine_extension.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/virtual_machine_extension) | resource |
 | [azurerm_virtual_network.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/virtual_network) | resource |
 | [azurerm_windows_virtual_machine.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/resources/windows_virtual_machine) | resource |
 | [random_string.admin_password](https://registry.terraform.io/providers/hashicorp/random/3.4.3/docs/resources/string) | resource |
+| [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.50.0/docs/data-sources/resource_group) | data source |
 
 ## Inputs
 
