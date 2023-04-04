@@ -60,7 +60,6 @@ resource "azurerm_virtual_network" "this" {
 
 # Create subnet
 resource "azurerm_subnet" "this" {
-  count = length(data.azurerm_resource_group.this.id) > 0 ? 1 : 0
   name = azurecaf_name.this.results.azurerm_subnet
   resource_group_name = data.azurerm_resource_group.this.name
   virtual_network_name = azurerm_virtual_network.this.name
