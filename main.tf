@@ -25,7 +25,7 @@ provider "azurerm" {
 module "scsolr_naming" {
   source      = "./modules/naming"
   client      = var.client
-  location    = var.location
+  location    = data.azurerm_resource_group.this.location
   project     = var.project
   environment = var.environment
 }
@@ -39,28 +39,28 @@ resource "azurecaf_name" "this" {
   separator   = "-"
 }
 
-resource "azurerm_resource_group" "this" {
-  name = var.resource_group_name
-  location = var.location
-}
-
-# data "azurerm_resource_group" "this" {
+# resource "azurerm_resource_group" "this" {
 #   name = var.resource_group_name
+#   location = var.location
 # }
+
+data "azurerm_resource_group" "this" {
+  name = var.resource_group_name
+}
 
 # Create virtual network
 resource "azurerm_virtual_network" "this" {
   name = azurecaf_name.this.results.azurerm_virtual_network
   address_space = ["10.0.0.0/16"]
-  resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
+  resource_group_name = data.azurerm_resource_group.this.name
+  location = data.azurerm_resource_group.this.location
   tags = var.tags
 }
 
 # Create subnet
 resource "azurerm_subnet" "this" {
   name = azurecaf_name.this.results.azurerm_subnet
-  resource_group_name = azurerm_resource_group.this.name
+  resource_group_name = data.azurerm_resource_group.this.name
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes = ["10.0.2.0/24"]
 }
@@ -68,8 +68,8 @@ resource "azurerm_subnet" "this" {
 # Create public IP
 resource "azurerm_public_ip" "this" {
   name = azurecaf_name.this.results.azurerm_public_ip
-  resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
+  resource_group_name = data.azurerm_resource_group.this.name
+  location = data.azurerm_resource_group.this.location
   allocation_method = "Static"
   sku = "Standard"
   tags = var.tags
@@ -78,8 +78,8 @@ resource "azurerm_public_ip" "this" {
 # Create Network Security Group and rules
 resource "azurerm_network_security_group" "this" {
   name                = azurecaf_name.this.results.azurerm_network_security_group
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
+  resource_group_name = data.azurerm_resource_group.this.name
+  location            = data.azurerm_resource_group.this.location
 
   security_rule {
     name                       = "RDP"
@@ -132,8 +132,8 @@ resource "azurerm_network_security_group" "this" {
 # Create network interface
 resource "azurerm_network_interface" "this" {
   name= azurecaf_name.this.results.azurerm_network_interface
-  resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
+  resource_group_name = data.azurerm_resource_group.this.name
+  location = data.azurerm_resource_group.this.location
 
   ip_configuration {
     name = "ipconfig"
@@ -159,8 +159,8 @@ resource "random_string" "admin_password" {
 # Create virtual machine
 resource "azurerm_windows_virtual_machine" "this" {
   name                = azurecaf_name.this.results.azurerm_windows_virtual_machine
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
+  resource_group_name = data.azurerm_resource_group.this.name
+  location            = data.azurerm_resource_group.this.location
 
   size = var.windows_vm_size
   admin_username = var.admin_username
