@@ -50,7 +50,6 @@ data "azurerm_resource_group" "this" {
 
 # Create virtual network
 resource "azurerm_virtual_network" "this" {
-  count = length(data.azurerm_resource_group.this.id) > 0 ? 1 : 0
   name = azurecaf_name.this.results.azurerm_virtual_network
   address_space = ["10.0.0.0/16"]
   resource_group_name = data.azurerm_resource_group.this.name
@@ -68,7 +67,6 @@ resource "azurerm_subnet" "this" {
 
 # Create public IP
 resource "azurerm_public_ip" "this" {
-  count = length(data.azurerm_resource_group.this.id) > 0 ? 1 : 0
   name = azurecaf_name.this.results.azurerm_public_ip
   resource_group_name = data.azurerm_resource_group.this.name
   location = var.location
@@ -79,7 +77,6 @@ resource "azurerm_public_ip" "this" {
 
 # Create Network Security Group and rules
 resource "azurerm_network_security_group" "this" {
-  count = length(data.azurerm_resource_group.this.id) > 0 ? 1 : 0
   name                = azurecaf_name.this.results.azurerm_network_security_group
   resource_group_name = data.azurerm_resource_group.this.name
   location            = var.location
@@ -134,7 +131,6 @@ resource "azurerm_network_security_group" "this" {
 
 # Create network interface
 resource "azurerm_network_interface" "this" {
-  count = length(data.azurerm_resource_group.this.id) > 0 ? 1 : 0
   name= azurecaf_name.this.results.azurerm_network_interface
   resource_group_name = data.azurerm_resource_group.this.name
   location = var.location
@@ -150,21 +146,18 @@ resource "azurerm_network_interface" "this" {
 
 # Connect the security group to the network interface
 resource "azurerm_network_interface_security_group_association" "this" {
-  count = length(data.azurerm_resource_group.this.id) > 0 ? 1 : 0
   network_interface_id      = azurerm_network_interface.this.id
   network_security_group_id = azurerm_network_security_group.this.id
 }
 
 # Generate Random Password for Admin User
 resource "random_string" "admin_password" {
-  count = length(data.azurerm_resource_group.this.id) > 0 ? 1 : 0
   length           = 16
   override_special = "$!#"
 }
 
 # Create virtual machine
 resource "azurerm_windows_virtual_machine" "this" {
-  count = length(data.azurerm_resource_group.this.id) > 0 ? 1 : 0
   name                = azurecaf_name.this.results.azurerm_windows_virtual_machine
   resource_group_name = data.azurerm_resource_group.this.name
   location            = var.location
@@ -194,7 +187,6 @@ resource "azurerm_windows_virtual_machine" "this" {
 }
 
 resource "azurerm_virtual_machine_extension" "this" {
-  count = length(data.azurerm_resource_group.this.id) > 0 ? 1 : 0
   name = "${azurerm_windows_virtual_machine.this.name}-ext"
   virtual_machine_id = azurerm_windows_virtual_machine.this.id
   publisher = "Microsoft.Compute"
