@@ -3,7 +3,7 @@
         "SolrVersion": {
             "Type": "String",
             "Description": "The version of Solr to install",
-            "DefaultValue": "7.2.1",
+            "DefaultValue": "6.6.1",
             "Validate": "[variable('Test.Solr.Download.Availability')]"
         },
         "SolrDomain": {
