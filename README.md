@@ -13,6 +13,9 @@ This module supports setup of Solr for Sitecore 9.0.0 to 10.3.0
 
 Sitecore Solr Compatibility Table: https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB0227897 
 
+## End Architecture
+![End Architecture](https://github.com/codeblitzmaster/terraform-azurerm-sitecoresolr/blob/main/End_Sitecore_Solr_Architecture.png?raw=true)
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

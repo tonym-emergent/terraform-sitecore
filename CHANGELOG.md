@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 <a name="v1.0.1"></a>
 ## [v1.0.1] - 27th April 2023
 - Added *Sitecore 9.0.0-10.3.0* - Solr SIF files support
+- Added End Architecture Diagram
+- Updated README
 
 
 <a name="v1.0.0"></a>
