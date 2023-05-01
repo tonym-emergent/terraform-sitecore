@@ -1,9 +1,9 @@
 variable "sitecore_version" {
   type = string
-  description = "Sitecore Version"
+  description = "Supports Sitecore Version 9.0.0 to 10.3.0"
   validation {
-    condition     = contains(["10.3.0"], lower(var.sitecore_version))
-    error_message = "Supported Sitecore 10.3.0 only"
+    condition     = contains(["9.0.0","9.1.0","9.2.0","9.3.0","10.0.0","10.1.0","10.2.0","10.3.0"], lower(var.sitecore_version))
+    error_message = "Supports Sitecore 9.0.0 to 10.3.0 only"
   }
 }
 

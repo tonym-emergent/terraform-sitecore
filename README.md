@@ -65,7 +65,7 @@ Sitecore Solr Compatibility Table: https://support.sitecore.com/kb?id=kb_article
 | <a name="input_location"></a> [location](#input\_location) | Azure region to use for deployment. | `string` | n/a | yes |
 | <a name="input_project"></a> [project](#input\_project) | Code name of the subproject. Must have 4 digits. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Resource group name for deployment. | `string` | n/a | yes |
-| <a name="input_sitecore_version"></a> [sitecore\_version](#input\_sitecore\_version) | Sitecore Version | `string` | n/a | yes |
+| <a name="input_sitecore_version"></a> [sitecore\_version](#input\_sitecore\_version) | Supports Sitecore Version 9.0.0 to 10.3.0 | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | The tags to associate with your resources. | `map` | <pre>{<br>  "company": "Acme Corp.",<br>  "environment": "DEV"<br>}</pre> | no |
 | <a name="input_windows_vm_size"></a> [windows\_vm\_size](#input\_windows\_vm\_size) | Azure Windows Virtual Machine Size | `string` | `"Standard_B2ms"` | no |
 
