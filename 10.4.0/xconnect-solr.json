@@ -7,7 +7,7 @@
         },
         "SolrRoot": {
             "Type": "string",
-            "DefaultValue": "c:\\solr-8.11.2",
+            "DefaultValue": "c:\\solr\\solr-8.11.2",
             "Description": "The file path to the Solr instance."
         },
         "SolrService": {
