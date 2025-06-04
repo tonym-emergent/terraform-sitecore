@@ -68,21 +68,14 @@ variable "admin_username" {
   default = "adminuser"
 }
 
-variable "vnet_address_space" {
+variable "virtual_network_name" {
   type = string
-  description = "Virtual Network Address Space in CIDR format"
-  default = "10.0.0.0/16"
+  description = "Name of the virtual network to deploy the Solr VM to."
+  default = "sitecore-solr-vnet"
 }
 
-variable "subnet_address_space" {
+variable "subnet_name" {
   type = string
-  description = "Subnet Address Space in CIDR format"
-  default = "10.0.2.0/24"
-}
-
-variable "sas_token" {
-  type = string
-  description = "SAS Token for accessing Azure Storage"
-  default = ""
-  
+  description = "Name of the subnet to deploy the Solr VM to."
+  default = "sitecore-solr-subnet"
 }

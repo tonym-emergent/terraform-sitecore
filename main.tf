@@ -17,48 +17,34 @@ resource "azurecaf_name" "this" {
   separator   = "-"
 }
 
-data "azurerm_resource_group" "this" {
-  name = var.resource_group_name
+# Data objects (VNet, Subnet, NSG)'
+
+data "azurerm_virtual_network" "this" {
+  name                = var.virtual_network_name
+  resource_group_name = var.resource_group_name
+}
+data "azurerm_subnet" "this" {
+  name                 = var.subnet_name
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = data.azurerm_virtual_network.this.name
 }
 
-# Storage Account for scripts
-data "azurerm_storage_account" "scripts" {
-  name                = "raycorpsbxsolr"
-  resource_group_name = "raycorp-sitecore-sbx-solr"
-}
-
-
-# Create virtual network
-resource "azurerm_virtual_network" "this" {
-  name = azurecaf_name.this.results.azurerm_virtual_network
-  address_space = [var.vnet_address_space]
-  resource_group_name = data.azurerm_resource_group.this.name
-  location = var.location
-  tags = var.tags
-}
-
-# Create subnet
-resource "azurerm_subnet" "this" {
-  name = azurecaf_name.this.results.azurerm_subnet
-  resource_group_name = data.azurerm_resource_group.this.name
-  virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes = [var.subnet_address_space]
-}
-
+/*
 # Create public IP
 resource "azurerm_public_ip" "this" {
   name = azurecaf_name.this.results.azurerm_public_ip
-  resource_group_name = data.azurerm_resource_group.this.name
+  resource_group_name = var.resource_group_name
   location = var.location
   allocation_method = "Static"
   sku = "Standard"
   tags = var.tags
 }
+*/
 
 # Create Network Security Group and rules
 resource "azurerm_network_security_group" "this" {
   name                = azurecaf_name.this.results.azurerm_network_security_group
-  resource_group_name = data.azurerm_resource_group.this.name
+  resource_group_name = var.resource_group_name
   location            = var.location
 
   security_rule {
@@ -112,14 +98,14 @@ resource "azurerm_network_security_group" "this" {
 # Create network interface
 resource "azurerm_network_interface" "this" {
   name= azurecaf_name.this.results.azurerm_network_interface
-  resource_group_name = data.azurerm_resource_group.this.name
+  resource_group_name = var.resource_group_name
   location = var.location
 
   ip_configuration {
     name = "ipconfig"
-    subnet_id = azurerm_subnet.this.id
+    subnet_id = data.azurerm_subnet.this.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.this.id
+    #public_ip_address_id = azurerm_public_ip.this.id
   }
   tags = var.tags
 }
@@ -139,7 +125,7 @@ resource "random_string" "admin_password" {
 # Create virtual machine
 resource "azurerm_windows_virtual_machine" "this" {
   name                = azurecaf_name.this.results.azurerm_windows_virtual_machine
-  resource_group_name = data.azurerm_resource_group.this.name
+  resource_group_name = var.resource_group_name
   location            = var.location
 
   size = var.windows_vm_size
@@ -177,7 +163,7 @@ resource "azurerm_virtual_machine_extension" "configure_server" {
 
   protected_settings = <<SETTINGS
     {
-      "fileUris": ["https://${data.azurerm_storage_account.scripts.name}.blob.core.windows.net/scripts/install.ps1?${var.sas_token}"],
+      "fileUris": ["https://raw.githubusercontent.com/tonym-emergent/terraform-sitecore/main/install.ps1"],
       "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File install.ps1"
     }
   SETTINGS

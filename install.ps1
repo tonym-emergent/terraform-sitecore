@@ -30,7 +30,7 @@ foreach ($path in $createDirectories) {
 choco feature enable -n allowGlobalConfirmation
 choco install jre8 -y
 refreshenv
-setx JAVA_HOME -m "C:\Program Files\Java\jre1.8.0_333"
+setx JAVA_HOME -m "C:\Program Files\Java\jre1.8.0_451"
 setx PATH "%PATH%;%JAVA_HOME%\bin"
 refreshenv
 Write-Output $env:JAVA_HOME
@@ -55,9 +55,7 @@ initLimit=10
 syncLimit=5
 dataDir=C://solr//zookeeper_data
 clientPort=2181
-server.1=192.168.236.133:2888:3888
-server.2=internalip2:2889:3889
-server.3=internalip3:2890:3890
+server.1=10.0.2.4:2888:3888
 "@
 $zooCfgPath = "C:\solr\apache-zookeeper-$($zookeeperVersion)-bin\conf\zoo.cfg"
 $zooCfgContent | Out-File -FilePath $zooCfgPath -Encoding ASCII
@@ -106,7 +104,7 @@ Install-SitecoreConfiguration -Path "c:\installs\$($sitecoreVersion)\sitecore-so
 Install-SitecoreConfiguration -Path "c:\installs\$($sitecoreVersion)\xconnect-solr.json"
 
 # Start Solr
-Start-Process -FilePath "C:\solr\solr-$($solrVersion)\bin\solr.cmd" -ArgumentList "start -c -f -p 8983 -z 192.168.236.133:2181" -NoNewWindow
+Start-Process -FilePath "C:\solr\solr-$($solrVersion)\bin\solr.cmd" -ArgumentList "start -c -f -p 8983 -z 10.0.2.4:2181" -NoNewWindow
 
 # Validate UI comes up
 Start-Process -FilePath "cmd.exe" -ArgumentList "/c start http://localhost:8983/solr/#/~cloud" -NoNewWindow
