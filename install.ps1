@@ -97,6 +97,7 @@ Invoke-WebRequest -Uri $artifactsUrl -OutFile $destinationPath
 # Extract the zip file
 Expand-Archive -Path $destinationPath -DestinationPath "C:\installs" -Force
 
+<#
 # Install Solr
 ## TODO: Update the Solr path and Zookeeper path as per your environment
 Install-SitecoreConfiguration -Path "c:\installs\$($sitecoreVersion)\Solr-SingleDeveloper.json"
@@ -120,3 +121,4 @@ $to = "C:\solr\solr-$($solrVersion)\server\solr\configsets\sitecore_configs"
 Get-ChildItem -Path $from | % {
     Copy-Item $_.fullname $to -Recurse -Force
 }
+#>

@@ -36,11 +36,6 @@
             "Description": "Start Solr as the SolrCloud development version.",
             "DefaultValue": false
         },
-        "JavaDownloadURL": {
-            "Type": "String",
-            "Description": "Download location of AdoptOpenJDK",
-            "DefaultValue": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jre_x64_windows_hotspot_8u242b08.zip"
-        },
         "ApacheCommonsDaemonURL" : {
             "Type": "String",
             "Description": "Download Location of Apache Commons Daemon",
@@ -76,7 +71,7 @@
         "Solr.Uri": "[concat('https://',parameter('SolrDomain'),':',parameter('SolrPort'))]",
 
         "Solr.Install.Path": "[JoinPath(parameter('SolrInstallRoot'),variable('Solr.Service'))]",
-        "Java.Install.Path": "[GetItem(Path:JoinPath(variable('Solr.Install.Path'),'jdk*'))]",
+        "Java.Install.Path": "C:\\Program Files\\Java\\jre1.8.0_451",
         "ACD.Install.Path": "[JoinPath(variable('Solr.Install.Path'),'daemon')]",
 
         "Temp.Location" : "[if(variable('Test.Temp.Location'),Environment('Temp'),parameter('TempLocation'))]",
@@ -98,7 +93,6 @@
 
         "Solr.StartupType": "[if(parameter('SolrCloud'),'solrcloud','')]",
 
-        "Java.Download.Temp": "[JoinPath(variable('Temp.Location'),'java.zip')]",
         "ACD.Download.Temp": "[JoinPath(variable('Temp.Location'),'ACD.zip')]",
         "Solr.Download.Temp" : "[JoinPath(variable('Temp.Location'),'solr.zip')]",
 
@@ -201,22 +195,6 @@
                 "Destination": "[variable('Solr.Install.Path')]"
             }
         },
-        "DownloadJavaX64": {
-            "Description": "Downloads Java x64.",
-            "Type": "DownloadFile",
-            "Params": {
-                "SourceUri" : "[parameter('JavaDownloadURL')]",
-                "DestinationPath" : "[variable('Java.Download.Temp')]"
-            }
-        },
-        "InstallJavaX64": {
-            "Description": "Installs Java x64.",
-            "Type": "ExpandArchive",
-            "Params": {
-                "Path": "[variable('Java.Download.Temp')]",
-                "DestinationPath": "[variable('Solr.Install.Path')]"
-            }
-        },
         "CreateSolrSSL": {
             "Description": "Creates a website certificate for the Solr website.",
             "Type": "StartProcess",
@@ -283,39 +261,6 @@
             "Params": {
                 "Path": "[variable('ACD.Download.Temp')]",
                 "DestinationPath": "[variable('ACD.Install.Path')]"
-            }
-        },
-        "CreateSOLRService":{
-            "Description": "Creates Solr Service",
-            "Type": "StartProcess",
-            "Params": {
-                "FilePath": "[variable('ACD.Binary.Location')]",
-                "ArgumentList": [
-                    "[concat('install ',variable('Solr.Service'))]",
-                    "[concat('--DisplayName=\"',variable('Solr.Service'),'\"')]",
-                    "--Startup=auto",
-                    "--StartMode=exe",
-                    "[concat('--StartImage=\"',variable('Solr.CMD.Location'),'\"')]",
-                    "[concat('--StartPath=\"',variable('Solr.Bin.Location'),'\"')]",
-                    "++StartParams=\"start\"",
-                    "--StopMode=exe",
-                    "[concat('--StopImage=\"',variable('Solr.CMD.Location'),'\"')]",
-                    "[concat('--StopPath=\"',variable('Solr.Bin.Location'),'\"')]",
-                    "++StopParams=\"stop\"",
-                    "--StopTimeout=10",
-                    "--StdOutput=auto",
-                    "--StdError=auto"
-                ],
-                "Wait": true
-            }
-        },
-        "StartSolr": {
-            "Description": "Runs the Solr service.",
-            "Type": "ManageService",
-            "Params": {
-                "Name": "[variable('Solr.Service')]",
-                "Status": "Running",
-                "PostDelay": "[parameter('SolrServiceStartTimeout')]"
             }
         },
         "SetClusterScheme": {
