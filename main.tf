@@ -1,26 +1,4 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.50.0"
-    }
-    azurecaf = {
-      source  = "aztfmod/azurecaf"
-      version = "2.0.0-preview3"
-    }
-    random = {
-      source = "hashicorp/random"
-      version = "3.4.3"
-    }
-  }
-}
 
-provider "azurerm" {
-  # Configuration options
-  features {
-  }
-  skip_provider_registration = true
-}
 
 module "scsolr_naming" {
   source      = "./modules/naming"
@@ -39,19 +17,21 @@ resource "azurecaf_name" "this" {
   separator   = "-"
 }
 
-# resource "azurerm_resource_group" "this" {
-#   name = var.resource_group_name
-#   location = var.location
-# }
-
 data "azurerm_resource_group" "this" {
   name = var.resource_group_name
 }
 
+# Storage Account for scripts
+data "azurerm_storage_account" "scripts" {
+  name                = "raycorpsbxsolr"
+  resource_group_name = "raycorp-sitecore-sbx-solr"
+}
+
+
 # Create virtual network
 resource "azurerm_virtual_network" "this" {
   name = azurecaf_name.this.results.azurerm_virtual_network
-  address_space = ["10.0.0.0/16"]
+  address_space = [var.vnet_address_space]
   resource_group_name = data.azurerm_resource_group.this.name
   location = var.location
   tags = var.tags
@@ -62,7 +42,7 @@ resource "azurerm_subnet" "this" {
   name = azurecaf_name.this.results.azurerm_subnet
   resource_group_name = data.azurerm_resource_group.this.name
   virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes = ["10.0.2.0/24"]
+  address_prefixes = [var.subnet_address_space]
 }
 
 # Create public IP
@@ -186,17 +166,19 @@ resource "azurerm_windows_virtual_machine" "this" {
   tags = var.tags
 }
 
-resource "azurerm_virtual_machine_extension" "this" {
-  name = "${azurerm_windows_virtual_machine.this.name}-ext"
-  virtual_machine_id = azurerm_windows_virtual_machine.this.id
-  publisher = "Microsoft.Compute"
-  type = "CustomScriptExtension"
-  type_handler_version = "1.9"
 
-  settings = <<SETTINGS
-  {
-    "fileUris":["https://raw.githubusercontent.com/codeblitzmaster/terraform-azurerm-sitecoresolr/main/Artifacts/Install-Solr.ps1"],
-    "commandToExecute": "powershell.exe -NonInteractive -ExecutionPolicy Unrestricted -File Install-Solr.ps1 -SitecoreVersion ${var.sitecore_version}"
-  }
+# Extensions to run a PowerShell scripts on the VM, in order of dependencies
+resource "azurerm_virtual_machine_extension" "configure_server" {
+  name                 = "configure_server"
+  virtual_machine_id   = azurerm_windows_virtual_machine.this.id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.10"
+
+  protected_settings = <<SETTINGS
+    {
+      "fileUris": ["https://${data.azurerm_storage_account.scripts.name}.blob.core.windows.net/scripts/install.ps1?${var.sas_token}"],
+      "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File install.ps1"
+    }
   SETTINGS
 }

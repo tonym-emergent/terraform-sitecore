@@ -1,10 +1,10 @@
 variable "sitecore_version" {
   type = string
-  description = "Supports Sitecore Version 9.0.0 to 10.3.0"
-  default     = "10.3.0"
+  description = "Supports Sitecore Version 10.3.0 to 10.4.0"
+  default     = "10.4.0"
   validation {
-    condition     = contains(["9.0.0","9.1.0","9.2.0","9.3.0","10.0.0","10.1.0","10.2.0","10.3.0"], lower(var.sitecore_version))
-    error_message = "Supports Sitecore 9.0.0 to 10.3.0 only"
+    condition     = contains(["10.3.0","10.4.0"], lower(var.sitecore_version))
+    error_message = "Supports Sitecore 10.3.0 to 10.4.0 only"
   }
 }
 
@@ -66,4 +66,23 @@ variable "admin_username" {
   type = string
   description = "VM Admin Username [Note: Password would be auto generated]"
   default = "adminuser"
+}
+
+variable "vnet_address_space" {
+  type = string
+  description = "Virtual Network Address Space in CIDR format"
+  default = "10.0.0.0/16"
+}
+
+variable "subnet_address_space" {
+  type = string
+  description = "Subnet Address Space in CIDR format"
+  default = "10.0.2.0/24"
+}
+
+variable "sas_token" {
+  type = string
+  description = "SAS Token for accessing Azure Storage"
+  default = ""
+  
 }
